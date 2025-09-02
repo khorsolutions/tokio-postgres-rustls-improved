@@ -1,4 +1,5 @@
 # tokio-postgres-rustls
+
 [![codecov](https://codecov.io/github/dsykes16/tokio-postgres-rustls/graph/badge.svg?token=PKUZQ62OP8)](https://codecov.io/github/dsykes16/tokio-postgres-rustls)
 [![tests](https://github.com/dsykes16/tokio-postgres-rustls/actions/workflows/rust.yml/badge.svg)](https://github.com/dsykes16/tokio-postgres-rustls/actions/workflows/rust.yml)
 
@@ -9,24 +10,28 @@ This fork strives to be actively maintained, and incorporates [Conrad Ludgate](h
 This is an integration between the [rustls TLS stack](https://github.com/ctz/rustls)
 and the [tokio-postgres asynchronous PostgreSQL client library](https://github.com/sfackler/rust-postgres).
 
-[API Documentation](https://docs.rs/tokio-postgres-rustls/)
+[API Documentation](https://docs.rs/tokio-postgres-rustls-improved/)
 
-# Using this patched fork:
-Include directly in dependencies like:
-```
-[dependencies]
-tokio-postgres-rustls = { git = "https://github.com/dsykes16/tokio-postgres-rustls.git", tag = "0.14.0" }
+## Use this crate directly:
+
+```sh
+cargo add tokio-postgres-rustls-improved
 ```
 
-Or include as a patch if `tokio-postgres-rustls` is a dependency of a 3rd party crate:
-```
+### Have a 3rd-party dependency that relies on the original `tokio-postgres-rustls`?
+
+Patch in our fork that maintains the original crate name like this:
+
+```toml
 [patch.crates-io]
-tokio-postgres-rustls = { git = "https://github.com/dsykes16/tokio-postgres-rustls.git", tag = "0.14.0" }
+tokio-postgres-rustls = { git = "https://github.com/khorsolutions/tokio-postgres-rustls.git", tag = "0.14.0" }
 ```
 
-# Example
-See `tests/integration.rs` for actual usage examples, including with SASL/SCRAM using Channel Binding.
-```
+## Example
+
+See `tests/integration.rs` for actual usage examples, including SASL/SCRAM using Channel Binding.
+
+```rust
     // Setup a `rustls::ClientConfig` (see Rustls docs for more info)
     let tls_config = rustls::ClientConfig::builder()
         .with_root_certificates(certs.roots)
@@ -45,9 +50,9 @@ See `tests/integration.rs` for actual usage examples, including with SASL/SCRAM 
         .user("ssl_user")
         .ssl_mode(SslMode::Require);
     let (client, conn) = pg_config.connect(tls).await.expect("connect");
-
-// ...
 ```
+NOTE: please use proper error handling in production code, this is an excerpt from tests that are expected to panic in a failure
 
-# License
-tokio-postgres-rustls is distributed under the MIT license.
+## License
+
+tokio-postgres-rustls-improved is distributed under the MIT license
