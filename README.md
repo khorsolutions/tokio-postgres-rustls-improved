@@ -19,8 +19,16 @@ and the [tokio-postgres asynchronous PostgreSQL client library](https://github.c
 
 ## Use this crate directly:
 
+With `aws-lc-rs` (default for `rustls`):
+
 ```sh
 cargo add tokio-postgres-rustls-improved
+```
+
+With `ring`:
+
+```sh
+cargo add tokio-postgres-rustls-improved --no-default-features --features ring
 ```
 
 ### Have a 3rd-party dependency that relies on the original `tokio-postgres-rustls`?
@@ -31,6 +39,8 @@ Patch in our fork that maintains the original crate name like this:
 [patch.crates-io]
 tokio-postgres-rustls = { git = "https://github.com/khorsolutions/tokio-postgres-rustls.git", tag = "0.15.0" }
 ```
+
+Please note that backports to this repo are not currently automated, so using `tokio-postgres-rustls-improved` is preferred when possible.
 
 ## Example
 
@@ -56,6 +66,7 @@ See `tests/integration.rs` for actual usage examples, including SASL/SCRAM using
         .ssl_mode(SslMode::Require);
     let (client, conn) = pg_config.connect(tls).await.expect("connect");
 ```
+
 NOTE: please use proper error handling in production code, this is an excerpt from tests that are expected to panic in a failure
 
 ## License
