@@ -1,6 +1,6 @@
 use tokio_postgres::config::{ChannelBinding, SslMode};
 use tokio_postgres::Config;
-use tokio_postgres_rustls::MakeRustlsConnect;
+use tokio_postgres_rustls_improved::MakeRustlsConnect;
 
 mod support;
 use support::certstore::CertStore;
