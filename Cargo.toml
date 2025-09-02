@@ -1,10 +1,10 @@
 [package]
-name = "tokio-postgres-rustls"
-description = "Rustls integration for tokio-postgres"
+name = "tokio-postgres-rustls-improved"
+description = "Fork of tokio-postgres-rustls with unsafe code removed, critical channel binding bug fixed, and a full integration test suite (see repo for code coverage reports)"
 version = "0.14.0"
 authors = [
-  "Jasper Hugo <jasper@jasperhugo.com>",
   "Dwayne Sykes <github-public@sykes.pw>",
+  "Jasper Hugo <jasper@jasperhugo.com>",
   "Aumetra Weisman <aumetra@cryptolab.net>",
   "Conrad Ludgate <conradludgate@gmail.com>",
   "Karsten Borgwaldt <kb@spambri.de>",
@@ -12,7 +12,7 @@ authors = [
   "Michael Sowka <soilfiction@gmail.com>",
   "ol <ol@teuto.net>",
 ]
-repository = "https://github.com/jbg/tokio-postgres-rustls"
+repository = "https://github.com/khorsolutions/tokio-postgres-rustls-improved"
 edition = "2018"
 license = "MIT"
 readme = "README.md"
@@ -29,7 +29,6 @@ tokio-rustls = { version = "0.26", default-features = false }
 x509-cert = { version = "0.2.5", default-features = false, features = ["std"] }
 
 [dev-dependencies]
-env_logger = { version = "0.11", default-features = false }
 tokio = { version = "1", default-features = false, features = ["macros", "rt"] }
 rustls = { version = "0.23", default-features = false, features = [
   "std",
