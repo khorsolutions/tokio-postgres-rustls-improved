@@ -1,4 +1,4 @@
-# tokio-postgres-rustls
+# tokio-postgres-rustls-improved
 
 [![crate](https://img.shields.io/crates/v/tokio-postgres-rustls-improved.svg)](https://crates.io/crates/tokio-postgres-rustls-improved/)
 [![codecov](https://codecov.io/gh/khorsolutions/tokio-postgres-rustls-improved/graph/badge.svg?token=8ZYN7O2K5V)](https://codecov.io/gh/khorsolutions/tokio-postgres-rustls-improved)
@@ -36,9 +36,16 @@ cargo add tokio-postgres-rustls-improved --no-default-features --features ring
 
 Patch in our fork that maintains the original crate name like this:
 
+With `aws-lc-rs` feature:
 ```toml
 [patch.crates-io]
-tokio-postgres-rustls = { git = "https://github.com/khorsolutions/tokio-postgres-rustls.git", tag = "0.15.0" }
+tokio-postgres-rustls = { git = "https://github.com/khorsolutions/tokio-postgres-rustls-patch.git", tag = "aws-lc-rs" }
+```
+
+With `ring` feature:
+```toml
+[patch.crates-io]
+tokio-postgres-rustls = { git = "https://github.com/khorsolutions/tokio-postgres-rustls-patch.git", tag = "ring" }
 ```
 
 Please note that backports to this repo are not currently automated, so using `tokio-postgres-rustls-improved` is preferred when possible.
