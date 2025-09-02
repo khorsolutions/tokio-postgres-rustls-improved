@@ -3,9 +3,14 @@
 [![codecov](https://codecov.io/github/dsykes16/tokio-postgres-rustls/graph/badge.svg?token=PKUZQ62OP8)](https://codecov.io/github/dsykes16/tokio-postgres-rustls)
 [![tests](https://github.com/dsykes16/tokio-postgres-rustls/actions/workflows/rust.yml/badge.svg)](https://github.com/dsykes16/tokio-postgres-rustls/actions/workflows/rust.yml)
 
-NOTE: This is a fork; the original [tokio-postgres-rustls](https://github.com/jbg/tokio-postgres-rustls) repo appears to be unmaintained and has known bugs.
+NOTE: This is a fork; the original [tokio-postgres-rustls](https://github.com/jbg/tokio-postgres-rustls) repo appears to be unmaintained and has known bugs with virtually no test coverage or CI pipeline.
 
-This fork strives to be actively maintained, and incorporates [Conrad Ludgate](https://github.com/conradludgate)'s fixes for [SCRAM channel binding](https://github.com/jbg/tokio-postgres-rustls/pull/32) and [removal of unsafe code](https://github.com/jbg/tokio-postgres-rustls/pull/33), this fork also adds comprehensive integration tests and a CI pipeline.
+## Improvements over original [`tokio-postgres-rustls`](https://github.com/jbg/tokio-postgres-rustls):
+
+- Removed unsafe code (thanks @conradludgate)
+- Fixes SCRAM/SASL channel binding
+- Add support for `aws-lc-rs` instead of `ring` (defaults to `aws-lc-rs`; consistent with `rustls` defaults)
+- Added comprehensive integration test suite that runs with both `ring` and `aws-lc-rs`
 
 This is an integration between the [rustls TLS stack](https://github.com/ctz/rustls)
 and the [tokio-postgres asynchronous PostgreSQL client library](https://github.com/sfackler/rust-postgres).
@@ -24,7 +29,7 @@ Patch in our fork that maintains the original crate name like this:
 
 ```toml
 [patch.crates-io]
-tokio-postgres-rustls = { git = "https://github.com/khorsolutions/tokio-postgres-rustls.git", tag = "0.14.0" }
+tokio-postgres-rustls = { git = "https://github.com/khorsolutions/tokio-postgres-rustls.git", tag = "0.15.0" }
 ```
 
 ## Example
