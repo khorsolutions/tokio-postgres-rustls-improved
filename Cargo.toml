@@ -1,7 +1,7 @@
 [package]
 name = "tokio-postgres-rustls-improved"
 description = "Fork of tokio-postgres-rustls with unsafe code removed, critical channel binding bug fixed, and a full integration test suite (see repo for code coverage reports)"
-version = "0.15.0"
+version = "0.15.1"
 authors = [
   "Dwayne Sykes <github-public@sykes.pw>",
   "Jasper Hugo <jasper@jasperhugo.com>",
@@ -41,3 +41,17 @@ rustls = { version = "0.23", default-features = false, features = [
 ] }
 sha2 = { version = "0.10", default-features = false, features = ["std", "oid"] }
 tokio = { version = "1", default-features = false, features = ["macros", "rt"] }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+unused = "deny"
+warnings = "deny"
+
+[workspace.lints.clippy]
+all = "deny"
+pedantic = "deny"
+nursery = "deny"
+unwrap_used = "deny"
+expect_used = "deny"
+dbg_macro = "deny"
+todo = "deny"

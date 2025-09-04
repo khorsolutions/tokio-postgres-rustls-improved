@@ -1,7 +1,15 @@
 #![doc = include_str!("../README.md")]
 #![forbid(rust_2018_idioms)]
-#![forbid(missing_docs, unsafe_code)]
-#![warn(clippy::all, clippy::pedantic)]
+#![forbid(missing_docs, unsafe_code, unused)]
+#![deny(
+    clippy::all,
+    clippy::pedantic,
+    clippy::unwrap_used,
+    clippy::expect_used,
+    clippy::nursery,
+    clippy::dbg_macro,
+    clippy::todo
+)]
 
 use std::{convert::TryFrom, sync::Arc};
 
@@ -150,9 +158,11 @@ mod private {
     }
 }
 
-/// A `MakeTlsConnect` implementation using `rustls`.
+/// A [`MakeTlsConnect`](tokio_postgres::tls::MakeTlsConnect) implementation backed by [`rustls`].
 ///
-/// That way you can connect to PostgreSQL using `rustls` as the TLS stack.
+/// This type allows you to establish PostgreSQL connections using `rustls` as the TLS provider,
+/// instead of relying on system-native TLS stacks. It wraps an [`Arc<ClientConfig>`] so that
+/// the TLS configuration can be cheaply cloned and reused across multiple connections.
 #[derive(Clone)]
 pub struct MakeRustlsConnect {
     config: Arc<ClientConfig>,
@@ -176,6 +186,20 @@ where
     type TlsConnect = private::RustlsConnect;
     type Error = rustls::pki_types::InvalidDnsNameError;
 
+    /// Creates a new [`MakeRustlsConnect`] from the given [`ClientConfig`].
+    ///
+    /// The configuration is stored inside an [`Arc`], so the returned
+    /// connector can be cloned and shared across tasks or connections
+    /// without duplicating the underlying TLS state.
+    ///
+    /// # Parameters
+    ///
+    /// - `config`: The `rustls` client configuration that determines how TLS
+    ///   handshakes are performed (e.g. certificates, ciphers, root stores).
+    ///
+    /// # Returns
+    ///
+    /// A ready-to-use [`MakeRustlsConnect`] instance.
     fn make_tls_connect(&mut self, hostname: &str) -> Result<Self::TlsConnect, Self::Error> {
         ServerName::try_from(hostname).map(|dns_name| {
             private::RustlsConnect(private::RustlsConnectData {
