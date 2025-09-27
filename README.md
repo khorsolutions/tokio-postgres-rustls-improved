@@ -7,12 +7,21 @@
 
 NOTE: This is a fork; the original [tokio-postgres-rustls](https://github.com/jbg/tokio-postgres-rustls) repo appears to be unmaintained and has known bugs with virtually no test coverage or CI pipeline.
 
+NOTE: Channel binding is not supported with Ed25519 certificates. This appears to be a limitation of Postgres, including Postgres 18.
+
 ## Improvements over original [`tokio-postgres-rustls`](https://github.com/jbg/tokio-postgres-rustls):
 
+0.15.2:
+
+- Support for `ECDSA_WITH_SHA512` channel binding (i.e. ECDSA P-521, secp521r1, NIST P-521)
+
+
+0.15.1:
+
 - Removed unsafe code (thanks @conradludgate)
-- Fixes SCRAM/SASL channel binding
-- Add support for `aws-lc-rs` instead of `ring` (defaults to `aws-lc-rs`; consistent with `rustls` defaults)
-- Added comprehensive integration test suite that runs with both `ring` and `aws-lc-rs`
+- Fixes SCRAM/SASL channel binding (was non-functional in all cases in original `tokio-postgres-rustls`)
+- Support for `aws-lc-rs` instead of `ring` (defaults to `aws-lc-rs`; consistent with `rustls` defaults)
+- Comprehensive integration test suite that runs with both `ring` and `aws-lc-rs`
 
 This is an integration between the [rustls TLS stack](https://github.com/ctz/rustls)
 and the [tokio-postgres asynchronous PostgreSQL client library](https://github.com/sfackler/rust-postgres).
@@ -38,12 +47,14 @@ cargo add tokio-postgres-rustls-improved --no-default-features --features ring
 Patch in our fork that maintains the original crate name like this:
 
 With `aws-lc-rs` feature:
+
 ```toml
 [patch.crates-io]
 tokio-postgres-rustls = { git = "https://github.com/khorsolutions/tokio-postgres-rustls-patch.git", tag = "aws-lc-rs" }
 ```
 
 With `ring` feature:
+
 ```toml
 [patch.crates-io]
 tokio-postgres-rustls = { git = "https://github.com/khorsolutions/tokio-postgres-rustls-patch.git", tag = "ring" }
@@ -53,11 +64,23 @@ tokio-postgres-rustls = { git = "https://github.com/khorsolutions/tokio-postgres
 
 See `tests/integration.rs` for actual usage examples, including SASL/SCRAM using Channel Binding.
 
-```rust
+```rust,ignore
+    use tokio_postgres::config::{ChannelBinding, SslMode};
+    use tokio_postgres_rustls_improved::MakeRustlsConnect;
+
+    // Build a [`rustls::RootCertStore`] and client certs
+    let roots = {
+        let rs = rustls::RootCertStore::empty();
+        rs.add(todo!("provide a [`rustls::pki_types::CertificateDer`]"));
+        rs
+    };
+    let client_certs = todo!("provide client cert and any intermediate(s) required to chain back to roots if applicable");
+    let client_key = todo!("provide private key for client cert");
+
     // Setup a `rustls::ClientConfig` (see Rustls docs for more info)
     let tls_config = rustls::ClientConfig::builder()
-        .with_root_certificates(certs.roots)
-        .with_client_auth_cert(certs.client_certs, certs.client_key)
+        .with_root_certificates(roots)
+        .with_client_auth_cert(client_certs, client_key)
         .expect("build rustls client config");
 
     // MakeRustlsConnect is provided by this library; it wraps a `rustls::CLientConfig`
@@ -67,10 +90,12 @@ See `tests/integration.rs` for actual usage examples, including SASL/SCRAM using
     let mut pg_config = Config::new();
     pg_config
         .host("localhost")
-        .port(pg.port)
+        .port(5432)
         .dbname("postgres")
-        .user("ssl_user")
-        .ssl_mode(SslMode::Require);
+        .user("scram_user")
+        .password("password")
+        .ssl_mode(SslMode::Require)
+        .channel_binding(ChannelBinding::Require);
     let (client, conn) = pg_config.connect(tls).await.expect("connect");
 ```
 
