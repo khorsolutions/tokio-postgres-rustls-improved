@@ -7,6 +7,15 @@ on:
 env:
   CARGO_TERM_COLOR: always
 jobs:
+  sonarqube:
+    name: SonarQube
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v6
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   test-coverage:
     runs-on: ubuntu-latest
     steps:
