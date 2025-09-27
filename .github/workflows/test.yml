@@ -7,19 +7,24 @@ on:
 env:
   CARGO_TERM_COLOR: always
 jobs:
-  test:
+  test-coverage:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
       - uses: taiki-e/install-action@cargo-nextest
       - uses: taiki-e/install-action@cargo-llvm-cov
-      - name: Run tests w/ aws-lc-rs (default)
+      - name: format
+        run: cargo fmt --check
+      - name: lint
+        run: cargo clippy -- -D warnings
+      - name: Test w/ aws-lc-rs (default feature)
         run: cargo llvm-cov nextest --profile ci
-      - name: Run tests w/ ring (optional)
+      - name: Test w/ ring (optional feature)
         run: >
           cargo llvm-cov nextest
           --no-default-features
           --features ring
+          -- --skip scram_p521_sha512
       - name: Generate coverage report
         run: cargo llvm-cov report --codecov --output-path coverage.json
       - name: Upload test results to Codecov
@@ -31,3 +36,42 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+  test-all-versions:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        postgres: ["13", "14", "15", "16", "17", "18"]
+        rust: ["1.86", "stable", "nightly"]
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set Rust Toolchain
+        run: |
+          rustup install ${{ matrix.rust }}
+          rustup override set ${{ matrix.rust }}
+      - uses: taiki-e/install-action@cargo-nextest
+      - name: Test w/ aws-lc-rs (default feature)
+        env:
+          POSTGRES_VERSION: ${{ matrix.postgres }}
+        run: |
+          if [ ${{ matrix.postgres}} -gte 17 ]; then
+            cargo nextest run --no-fail-fast
+          else
+            cargo nextest run --no-fail-fast -- --skip ssl_direct_negotiation
+          fi
+      - name: Test w/ ring (optional feature)
+        env:
+          POSTGRES_VERSION: ${{ matrix.postgres }}
+        run: |
+          if [ ${{ matrix.postgres}} -gte 17 ]; then
+            cargo nextest run \
+            --no-default-features \
+            --features ring \
+            -- --skip scram_p521_sha512
+          else
+            cargo nextest run \
+            --no-default-features \
+            --features ring \
+            -- \
+            --skip ssl_direct_negotiation \
+            --skip scram_p521_sha512
+          fi
