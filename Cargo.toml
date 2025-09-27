@@ -13,7 +13,8 @@ authors = [
 	"ol <ol@teuto.net>",
 ]
 repository = "https://github.com/khorsolutions/tokio-postgres-rustls-improved"
-edition = "2018"
+edition = "2024"
+rust-version = "1.86"
 license = "MIT"
 readme = "README.md"
 
