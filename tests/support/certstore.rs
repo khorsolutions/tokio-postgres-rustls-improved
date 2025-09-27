@@ -1,61 +1,61 @@
-use rustls::pki_types::{pem::PemObject, CertificateDer, PrivateKeyDer};
+use rcgen::{
+    CertificateParams, CertifiedIssuer, DistinguishedName, KeyPair, SignatureAlgorithm,
+    PKCS_RSA_SHA256,
+};
+use rustls::pki_types::{CertificateDer, PrivateKeyDer, PrivatePkcs8KeyDer};
 
-pub(crate) struct CertStore<'a> {
-    pub roots: rustls::RootCertStore,
-    pub client_certs: Vec<CertificateDer<'a>>,
-    pub client_key: PrivateKeyDer<'a>,
+pub(crate) struct CertStore {
+    pub rootstore: rustls::RootCertStore,
+    pub root_pem: String,
+    pub client_certs: Vec<CertificateDer<'static>>,
+    pub client_key: PrivateKeyDer<'static>,
+    pub server_pem: String,
+    pub server_key_pem: String,
 }
 
-impl CertStore<'_> {
-    pub(crate) fn roots<'a>() -> rustls::RootCertStore {
+impl CertStore {
+    pub(crate) fn default() -> CertStore {
+        CertStore::make_certs(&PKCS_RSA_SHA256)
+    }
+    fn rootstore(der: &CertificateDer) -> rustls::RootCertStore {
         let mut roots = rustls::RootCertStore::empty();
-        roots
-            .add(CertificateDer::from_pem_file("tests/support/ca.crt").expect("load ca cert"))
-            .expect("add root ca");
+        roots.add(der.to_owned()).expect("add root ca");
         roots
     }
 
-    pub(crate) fn sha256<'a>() -> CertStore<'a> {
-        let client_certs =
-            vec![CertificateDer::from_pem_file("tests/support/client.crt")
-                .expect("load client cert")];
-        let client_key =
-            PrivateKeyDer::from_pem_file("tests/support/client.key").expect("load client key");
+    pub(crate) fn make_certs(algo: &'static SignatureAlgorithm) -> CertStore {
+        let ca_key = KeyPair::generate_for(algo).unwrap();
+        let issuer = CertifiedIssuer::self_signed(
+            {
+                let mut params = CertificateParams::default();
+                params.is_ca = rcgen::IsCa::Ca(rcgen::BasicConstraints::Unconstrained);
+                params
+            },
+            &ca_key,
+        )
+        .unwrap();
+        let mut client_params =
+            CertificateParams::new(vec!["localhost".to_string(), "127.0.0.1".to_string()]).unwrap();
+        client_params.distinguished_name = {
+            let mut dn = DistinguishedName::new();
+            dn.push(rcgen::DnType::CommonName, "ssl_user");
+            dn
+        };
+        let client_key = KeyPair::generate_for(algo).unwrap();
+        let client_cert = client_params.signed_by(&client_key, &issuer).unwrap();
+
+        let server_params =
+            CertificateParams::new(vec!["localhost".to_string(), "127.0.0.1".to_string()]).unwrap();
+        let server_key = KeyPair::generate_for(algo).unwrap();
+        let server_cert = server_params.signed_by(&server_key, &issuer).unwrap();
 
         CertStore {
-            roots: CertStore::roots(),
-            client_certs: client_certs,
-            client_key: client_key,
-        }
-    }
-
-    pub(crate) fn sha384<'a>() -> CertStore<'a> {
-        let client_certs = vec![
-            CertificateDer::from_pem_file("tests/support/client_sha384.crt")
-                .expect("load client cert"),
-        ];
-        let client_key =
-            PrivateKeyDer::from_pem_file("tests/support/client.key").expect("load client key");
-
-        CertStore {
-            roots: CertStore::roots(),
-            client_certs: client_certs,
-            client_key: client_key,
-        }
-    }
-
-    pub(crate) fn sha512<'a>() -> CertStore<'a> {
-        let client_certs = vec![
-            CertificateDer::from_pem_file("tests/support/client_sha512.crt")
-                .expect("load client cert"),
-        ];
-        let client_key =
-            PrivateKeyDer::from_pem_file("tests/support/client.key").expect("load client key");
-
-        CertStore {
-            roots: CertStore::roots(),
-            client_certs: client_certs,
-            client_key: client_key,
+            rootstore: CertStore::rootstore(issuer.der()),
+            root_pem: issuer.pem(),
+            client_certs: vec![client_cert.der().to_owned()],
+            client_key: PrivateKeyDer::Pkcs8(PrivatePkcs8KeyDer::from(client_key.serialize_der())),
+            server_pem: server_cert.pem(),
+            server_key_pem: server_key.serialize_pem(),
         }
     }
 }
