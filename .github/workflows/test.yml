@@ -10,21 +10,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Cache Postgres Image
-        id: cache-postgres-image
-        uses: actions/cache@v4
-        with:
-          path: /tmp/postgres-17.tar
-          key: postgres-17-${{ runner.os }}
-      - name: Pull and Save Postgres 17 (if cache miss)
-        if: steps.cache-postgres-image.outputs.cache-hit != 'true'
-        run: |
-          docker pull postgres:17
-          docker save postgres:17 -o /tmp/postgres-17.tar
-      - name: Load Postgres 17 (if cache hit)
-        if: steps.cache-postgres-image.outputs.cache-hit == 'true'
-        run: |
-          docker load -i /tmp/postgres-17.tar
       - uses: actions/checkout@v5
       - uses: taiki-e/install-action@cargo-nextest
       - uses: taiki-e/install-action@cargo-llvm-cov
