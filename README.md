@@ -15,7 +15,7 @@ NOTE: Channel binding is not supported with Ed25519 certificates. This appears t
 0.15.2:
 
 - Support for `ECDSA_WITH_SHA512` channel binding (i.e. ECDSA P-521, secp521r1, NIST P-521)
-    NOTE: only supported by `aws-lc-rs` (default); unsupported with `ring` crypto provider
+  NOTE: only supported by `aws-lc-rs` (default); unsupported with `ring` crypto provider
 - Integration test matrix to validate Postgres 13 through 18 with rustc MSRV, stable, and nightly.
 
 0.15.1:

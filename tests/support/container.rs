@@ -1,9 +1,9 @@
 use tokio::time::{Duration, Instant};
 
 use testcontainers::{
+    ContainerAsync, GenericImage, Healthcheck, ImageExt,
     core::{AccessMode, IntoContainerPort, Mount, WaitFor},
     runners::AsyncRunner,
-    ContainerAsync, GenericImage, Healthcheck, ImageExt,
 };
 use tokio_postgres::{Config, NoTls};
 

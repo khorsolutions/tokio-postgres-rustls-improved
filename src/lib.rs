@@ -13,7 +13,7 @@
 
 use std::{convert::TryFrom, sync::Arc};
 
-use rustls::{pki_types::ServerName, ClientConfig};
+use rustls::{ClientConfig, pki_types::ServerName};
 use tokio::io::{AsyncRead, AsyncWrite};
 use tokio_postgres::tls::MakeTlsConnect;
 
@@ -34,8 +34,8 @@ mod private {
     use sha2::{Digest, Sha256, Sha384, Sha512};
     use tokio::io::{AsyncRead, AsyncWrite, ReadBuf};
     use tokio_postgres::tls::{ChannelBinding, TlsConnect};
-    use tokio_rustls::{client::TlsStream, TlsConnector};
-    use x509_cert::{der::Decode, Certificate};
+    use tokio_rustls::{TlsConnector, client::TlsStream};
+    use x509_cert::{Certificate, der::Decode};
 
     pub struct TlsConnectFuture<S> {
         inner: tokio_rustls::Connect<S>,

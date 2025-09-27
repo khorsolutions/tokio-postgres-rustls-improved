@@ -1,5 +1,5 @@
-use tokio_postgres::config::{ChannelBinding, SslMode, SslNegotiation};
 use tokio_postgres::Config;
+use tokio_postgres::config::{ChannelBinding, SslMode, SslNegotiation};
 use tokio_postgres_rustls_improved::MakeRustlsConnect;
 
 mod support;
@@ -40,7 +40,10 @@ async fn ssl_user_without_client_cert_rejected() {
     };
 
     if err.to_string() != "db error: FATAL: connection requires a valid client certificate" {
-        panic!("connect to postgres as ssl_user without client auth failed with unexpected error: {:?}", err);
+        panic!(
+            "connect to postgres as ssl_user without client auth failed with unexpected error: {:?}",
+            err
+        );
     }
 }
 

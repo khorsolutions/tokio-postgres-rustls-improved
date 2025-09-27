@@ -1,6 +1,6 @@
 use rcgen::{
-    CertificateParams, CertifiedIssuer, DistinguishedName, KeyPair, SignatureAlgorithm,
-    PKCS_RSA_SHA256,
+    CertificateParams, CertifiedIssuer, DistinguishedName, KeyPair, PKCS_RSA_SHA256,
+    SignatureAlgorithm,
 };
 use rustls::pki_types::{CertificateDer, PrivateKeyDer, PrivatePkcs8KeyDer};
 
