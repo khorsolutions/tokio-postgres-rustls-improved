@@ -17,7 +17,8 @@ impl PostgresContainer {
         server_cert: String,
         server_key: String,
     ) -> Self {
-        let container = GenericImage::new("postgres", "17")
+        let postgres_version = std::env::var("POSTGRES_VERSION").unwrap_or(String::from("17"));
+        let container = GenericImage::new("postgres", &postgres_version)
             .with_exposed_port(5433.tcp())
             .with_wait_for(WaitFor::healthcheck())
             // 4s timeout on initial healthcheck
