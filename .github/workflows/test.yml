@@ -9,6 +9,8 @@ env:
 jobs:
   sonarqube:
     name: SonarQube
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -17,6 +19,8 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   test-coverage:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -46,6 +50,8 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
   test-all-versions:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     strategy:
       matrix:
