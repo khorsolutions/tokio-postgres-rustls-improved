@@ -13,7 +13,7 @@
 
 use std::{convert::TryFrom, sync::Arc};
 
-use rustls::{pki_types::ServerName, ClientConfig};
+use rustls::{ClientConfig, pki_types::ServerName};
 use tokio::io::{AsyncRead, AsyncWrite};
 use tokio_postgres::tls::MakeTlsConnect;
 
@@ -26,19 +26,16 @@ mod private {
     };
 
     use rustls::pki_types::ServerName;
-    use sha2::digest::const_oid::db::{
-        rfc5912::{
-            ECDSA_WITH_SHA_256, ECDSA_WITH_SHA_384, ID_SHA_1, ID_SHA_256, ID_SHA_384, ID_SHA_512,
-            SHA_1_WITH_RSA_ENCRYPTION, SHA_256_WITH_RSA_ENCRYPTION, SHA_384_WITH_RSA_ENCRYPTION,
-            SHA_512_WITH_RSA_ENCRYPTION,
-        },
-        rfc8410::ID_ED_25519,
+    use sha2::digest::const_oid::db::rfc5912::{
+        ECDSA_WITH_SHA_256, ECDSA_WITH_SHA_384, ECDSA_WITH_SHA_512, ID_MD_5, ID_SHA_1, ID_SHA_256,
+        ID_SHA_384, ID_SHA_512, SHA_1_WITH_RSA_ENCRYPTION, SHA_256_WITH_RSA_ENCRYPTION,
+        SHA_384_WITH_RSA_ENCRYPTION, SHA_512_WITH_RSA_ENCRYPTION,
     };
     use sha2::{Digest, Sha256, Sha384, Sha512};
     use tokio::io::{AsyncRead, AsyncWrite, ReadBuf};
     use tokio_postgres::tls::{ChannelBinding, TlsConnect};
-    use tokio_rustls::{client::TlsStream, TlsConnector};
-    use x509_cert::{der::Decode, Certificate};
+    use tokio_rustls::{TlsConnector, client::TlsStream};
+    use x509_cert::{Certificate, der::Decode};
 
     pub struct TlsConnectFuture<S> {
         inner: tokio_rustls::Connect<S>,
@@ -90,8 +87,9 @@ mod private {
                     |_| ChannelBinding::none(),
                     |cert| {
                         match cert.signature_algorithm.oid {
-                            // Note: SHA1 is upgraded to SHA256 as per https://datatracker.ietf.org/doc/html/rfc5929#section-4.1
-                            ID_SHA_1
+                            // Note: MD5 and SHA1 are upgraded to SHA256 as per https://datatracker.ietf.org/doc/html/rfc5929#section-4.1
+                            ID_MD_5
+                            | ID_SHA_1
                             | ID_SHA_256
                             | SHA_1_WITH_RSA_ENCRYPTION
                             | SHA_256_WITH_RSA_ENCRYPTION
@@ -103,7 +101,7 @@ mod private {
                                     Sha384::digest(certs[0].as_ref()).to_vec(),
                                 )
                             }
-                            ID_SHA_512 | SHA_512_WITH_RSA_ENCRYPTION | ID_ED_25519 => {
+                            ID_SHA_512 | SHA_512_WITH_RSA_ENCRYPTION | ECDSA_WITH_SHA_512 => {
                                 ChannelBinding::tls_server_end_point(
                                     Sha512::digest(certs[0].as_ref()).to_vec(),
                                 )
