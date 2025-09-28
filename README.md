@@ -5,6 +5,10 @@
 [![tests](https://github.com/khorsolutions/tokio-postgres-rustls-improved/actions/workflows/test.yml/badge.svg)](https://github.com/khorsolutions/tokio-postgres-rustls-improved/actions/workflows/test.yml)
 [![docs.rs](https://img.shields.io/docsrs/tokio-postgres-rustls-improved)](https://docs.rs/tokio-postgres-rustls-improved/)
 [![msrv](https://img.shields.io/crates/msrv/tokio-postgres-rustls-improved)](https://crates.io/crates/tokio-postgres-rustls-improved/)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=khorsolutions_tokio-postgres-rustls-improved&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=khorsolutions_tokio-postgres-rustls-improved)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=khorsolutions_tokio-postgres-rustls-improved&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=khorsolutions_tokio-postgres-rustls-improved)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=khorsolutions_tokio-postgres-rustls-improved&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=khorsolutions_tokio-postgres-rustls-improved)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=khorsolutions_tokio-postgres-rustls-improved&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=khorsolutions_tokio-postgres-rustls-improved)
 
 NOTE: This is a fork; the original [tokio-postgres-rustls](https://github.com/jbg/tokio-postgres-rustls) repo appears to be unmaintained and has known bugs with virtually no test coverage or CI pipeline.
 
