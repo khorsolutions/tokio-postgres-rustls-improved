@@ -17,6 +17,12 @@ use rustls::{ClientConfig, pki_types::ServerName};
 use tokio::io::{AsyncRead, AsyncWrite};
 use tokio_postgres::tls::MakeTlsConnect;
 
+#[cfg(feature = "config-stream")]
+mod dynamic_config;
+#[cfg(feature = "config-stream")]
+#[cfg_attr(docsrs, doc(cfg(feature = "config-stream")))]
+pub use dynamic_config::MakeDynamicRustlsConnect;
+
 mod private {
     use std::{
         future::Future,
