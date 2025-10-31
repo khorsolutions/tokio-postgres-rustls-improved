@@ -162,7 +162,7 @@ mod private {
     }
 }
 
-/// A [`MakeTlsConnect`](tokio_postgres::tls::MakeTlsConnect) implementation backed by [`rustls`].
+/// A [`MakeTlsConnect`] implementation backed by [`rustls`].
 ///
 /// This type allows you to establish PostgreSQL connections using `rustls` as the TLS provider,
 /// instead of relying on system-native TLS stacks. It wraps an [`Arc<ClientConfig>`] so that

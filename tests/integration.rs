@@ -39,7 +39,7 @@ async fn ssl_user_without_client_cert_rejected() {
         panic!("connect to postgres as ssl_user without client auth should fail");
     };
 
-    if err.to_string() != "db error: FATAL: connection requires a valid client certificate" {
+    if !format!("{:?}", err).contains("connection requires a valid client certificate") {
         // mac raises an os-level connection refused error; linux works as expected, windows is
         // unverified.
         #[cfg(not(target_os = "macos"))]

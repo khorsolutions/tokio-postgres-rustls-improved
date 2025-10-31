@@ -68,7 +68,7 @@ jobs:
         env:
           POSTGRES_VERSION: ${{ matrix.postgres }}
         run: |
-          if [ ${{ matrix.postgres}} -gte 17 ]; then
+          if [ ${{ matrix.postgres}} -ge 17 ]; then
             cargo nextest run --no-fail-fast
           else
             cargo nextest run --no-fail-fast -- --skip ssl_direct_negotiation
@@ -77,7 +77,7 @@ jobs:
         env:
           POSTGRES_VERSION: ${{ matrix.postgres }}
         run: |
-          if [ ${{ matrix.postgres}} -gte 17 ]; then
+          if [ ${{ matrix.postgres}} -ge 17 ]; then
             cargo nextest run \
             --no-default-features \
             --features ring \
