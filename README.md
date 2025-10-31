@@ -16,6 +16,10 @@ NOTE: Channel binding is not supported with Ed25519 certificates. This appears t
 
 ## Improvements over original [`tokio-postgres-rustls`](https://github.com/jbg/tokio-postgres-rustls):
 
+0.16.0:
+
+- [`MakeDynamicRustlsConnect`] to support dynamic configuration via any `rustls-config-stream` provider (e.g. `rustls-spiffe`).
+
 0.15.2:
 
 - Support for `ECDSA_WITH_SHA512` channel binding (i.e. ECDSA P-521, secp521r1, NIST P-521)
