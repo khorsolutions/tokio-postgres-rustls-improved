@@ -1,7 +1,7 @@
 [package]
 name = "tokio-postgres-rustls-improved"
 description = "Fork of tokio-postgres-rustls with unsafe code removed, critical channel binding bug fixed, and a full integration test suite (see repo for code coverage reports)"
-version = "0.16.0"
+version = "0.16.1"
 authors = [
 	"Dwayne Sykes <github-public@sykes.pw>",
 	"Jasper Hugo <jasper@jasperhugo.com>",
