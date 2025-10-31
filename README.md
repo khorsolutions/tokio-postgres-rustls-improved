@@ -4,6 +4,7 @@
 [![codecov](https://codecov.io/gh/khorsolutions/tokio-postgres-rustls-improved/graph/badge.svg?token=8ZYN7O2K5V)](https://codecov.io/gh/khorsolutions/tokio-postgres-rustls-improved)
 [![tests](https://github.com/khorsolutions/tokio-postgres-rustls-improved/actions/workflows/test.yml/badge.svg)](https://github.com/khorsolutions/tokio-postgres-rustls-improved/actions/workflows/test.yml)
 [![docs.rs](https://img.shields.io/docsrs/tokio-postgres-rustls-improved)](https://docs.rs/tokio-postgres-rustls-improved/)
+[![deps.rs](https://img.shields.io/deps-rs/repo/github/khorsolutions/tokio-postgres-rustls-improved)](https://deps.rs/repo/github/khorsolutions/tokio-postgres-rustls-improved)
 [![msrv](https://img.shields.io/crates/msrv/tokio-postgres-rustls-improved)](https://crates.io/crates/tokio-postgres-rustls-improved/)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=khorsolutions_tokio-postgres-rustls-improved&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=khorsolutions_tokio-postgres-rustls-improved)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=khorsolutions_tokio-postgres-rustls-improved&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=khorsolutions_tokio-postgres-rustls-improved)
