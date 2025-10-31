@@ -19,7 +19,7 @@ NOTE: Channel binding is not supported with Ed25519 certificates. This appears t
 
 0.16.0:
 
-- [`MakeDynamicRustlsConnect`] to support dynamic configuration via any `rustls-config-stream` provider (e.g. `rustls-spiffe`).
+- [`MakeDynamicRustlsConnect`] to support dynamic configuration via any [`rustls-config-stream`](<https://crates.io/crates/rustls-config-stream>) provider (e.g. [`rustls-spiffe`](<https://crates.io/crates/rustls-spiffe>)).
 
 0.15.2:
 
