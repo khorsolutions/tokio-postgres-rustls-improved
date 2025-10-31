@@ -26,10 +26,10 @@ config-stream = ["dep:rustls-config-stream"]
 tracing = ["rustls-config-stream?/tracing"]
 
 [dependencies]
-rustls = { version = "0.23", default-features = false }
+rustls = { version = ">=0.23.18", default-features = false }
 rustls-config-stream = { version = "0.2.0", optional = true }
 sha2 = { version = "0.10", default-features = false, features = ["oid"] }
-tokio = { version = "1", default-features = false }
+tokio = { version = ">=1.44.2", default-features = false }
 tokio-postgres = { version = "0.7", default-features = false, features = [
 	"runtime",
 ] }
