@@ -81,7 +81,7 @@ async fn ssl_user_ok() {
     let stmt = client.prepare("SELECT 1::INT4").await.expect("prepare");
     let rows = client.query(&stmt, &[]).await.expect("query");
     assert_eq!(1, rows.len());
-    let res: i32 = (&rows[0]).get(0);
+    let res: i32 = rows[0].get(0);
     assert_eq!(1, res);
 }
 
@@ -118,7 +118,7 @@ async fn ssl_direct_negotiation() {
     let stmt = client.prepare("SELECT 1::INT4").await.expect("prepare");
     let rows = client.query(&stmt, &[]).await.expect("query");
     assert_eq!(1, rows.len());
-    let res: i32 = (&rows[0]).get(0);
+    let res: i32 = rows[0].get(0);
     assert_eq!(1, res);
 }
 
@@ -157,7 +157,7 @@ macro_rules! scram_test {
             let stmt = client.prepare("SELECT 1::INT4").await.expect("prepare");
             let rows = client.query(&stmt, &[]).await.expect("query");
             assert_eq!(1, rows.len());
-            let res: i32 = (&rows[0]).get(0);
+            let res: i32 = rows[0].get(0);
             assert_eq!(1, res);
         }
     };
@@ -218,6 +218,7 @@ mod dynamic_config {
 
     #[derive(Debug)]
     struct MockClientConfigStreamBuilder {
+        #[allow(clippy::type_complexity)]
         streams:
             Mutex<VecDeque<mpsc::Receiver<Result<Arc<ClientConfig>, ClientConfigStreamError>>>>,
         builds: Arc<AtomicUsize>,
@@ -277,7 +278,7 @@ mod dynamic_config {
             .await
             .expect("push bad config onto stream");
 
-        let provider = ClientConfigProvider::start(builder).await.unwrap().into();
+        let provider = ClientConfigProvider::start(builder).await.unwrap();
         let tls = MakeDynamicRustlsConnect::new(provider);
 
         // connecting with "bad" config should fail
@@ -301,7 +302,7 @@ mod dynamic_config {
         let stmt = client.prepare("SELECT 1::INT4").await.expect("prepare");
         let rows = client.query(&stmt, &[]).await.expect("query");
         assert_eq!(1, rows.len());
-        let res: i32 = (&rows[0]).get(0);
+        let res: i32 = rows[0].get(0);
         assert_eq!(1, res);
     }
 }
