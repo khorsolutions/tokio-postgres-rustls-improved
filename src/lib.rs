@@ -99,7 +99,7 @@ mod private {
                 Some(certs) if !certs.is_empty() => Certificate::from_der(&certs[0]).map_or_else(
                     |_| ChannelBinding::none(),
                     |cert| {
-                        match cert.signature_algorithm.oid {
+                        match cert.signature_algorithm().oid {
                             // Note: MD5 and SHA1 are upgraded to SHA256 as per https://datatracker.ietf.org/doc/html/rfc5929#section-4.1
                             ID_MD_5
                             | ID_SHA_1
