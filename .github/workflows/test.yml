@@ -55,8 +55,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        postgres: ["13", "14", "15", "16", "17", "18"]
-        rust: ["1.86", "stable", "nightly"]
+        postgres: ["13", "14", "15", "16", "17", "18", "19beta4"]
+        rust: ["1.88", "stable", "nightly"]
     steps:
       - uses: actions/checkout@v7
       - name: Set Rust Toolchain

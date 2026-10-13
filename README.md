@@ -11,9 +11,21 @@
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=khorsolutions_tokio-postgres-rustls-improved&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=khorsolutions_tokio-postgres-rustls-improved)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=khorsolutions_tokio-postgres-rustls-improved&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=khorsolutions_tokio-postgres-rustls-improved)
 
-NOTE: This is a fork; the original [tokio-postgres-rustls](https://github.com/jbg/tokio-postgres-rustls) repo appears to be unmaintained and has known bugs with virtually no test coverage or CI pipeline.
-
 NOTE: Channel binding is not supported with Ed25519 certificates. This appears to be a limitation of Postgres, including Postgres 18.
+
+## Supported Postgres Versions:
+
+| Postgres | Tested in CI | Direct TLS negotiation (`sslnegotiation=direct`) |
+|----------|:------------:|:------------------------------------------------:|
+| 13       | ✅           | ❌ (requires 17+)                                |
+| 14       | ✅           | ❌ (requires 17+)                                |
+| 15       | ✅           | ❌ (requires 17+)                                |
+| 16       | ✅           | ❌ (requires 17+)                                |
+| 17       | ✅           | ✅                                               |
+| 18       | ✅           | ✅                                               |
+| 19 (beta) | ✅          | ✅                                               |
+
+Each version is tested against Rust 1.88 (MSRV), stable, and nightly, with both the `aws-lc-rs` (default) and `ring` features.
 
 ## Improvements over original [`tokio-postgres-rustls`](https://github.com/jbg/tokio-postgres-rustls):
 
