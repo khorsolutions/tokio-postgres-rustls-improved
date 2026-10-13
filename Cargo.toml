@@ -1,7 +1,6 @@
 [package]
 name = "tokio-postgres-rustls-improved"
 version = "0.17.0"
-version = "0.16.2"
 authors = [
 	"Dwayne Sykes <github-public@sykes.pw>",
 	"Jasper Hugo <jasper@jasperhugo.com>",
@@ -37,7 +36,7 @@ tokio-rustls = { version = "0.26", default-features = false }
 x509-cert = { version = "0.3.0", default-features = false, features = ["std"] }
 
 [dev-dependencies]
-testcontainers = { git = "https://github.com/dsykes16/testcontainers-rs.git", branch = "remove-ring-dependency", default-features = false }
+testcontainers = { version = "0.28.0", default-features = false}
 rustls = { version = "0.23", default-features = false, features = [
 	"std",
 	"logging",
@@ -50,9 +49,6 @@ rcgen = { version = "0.14.10", default-features = false, features = [
 	"aws_lc_rs",
 	"pem",
 ] }
-
-[patch.crates-io]
-bollard = { git = "https://github.com/mbodmer/bollard.git", branch = "fix-buildkit-feature-not-providerless" }
 
 [workspace.lints.rust]
 unused = { level = "deny", priority = -1 }
