@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@d209202bc7d53ff1cc128f7f907dac145c9d6ae9 # v8.3.0
+        uses: SonarSource/sonarqube-scan-action@e805d875275f728fac1885b413934be6d7c63f65 # v8.4.1
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   test-coverage:
@@ -24,8 +24,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: taiki-e/install-action@31bc3c614629c629e983adbbe0ac85c251535667 # cargo-nextest
-      - uses: taiki-e/install-action@c3076e6fa5aeb9a93daf1bd8eff73345250a8a9c # cargo-llvm-cov
+      - uses: taiki-e/install-action@e75ebe7dbc95b597977d60b8be6b783b732e4d3b # cargo-nextest
+      - uses: taiki-e/install-action@7ba3421b00d46a29aaedcfe59124f4574e23e73e # cargo-llvm-cov
       - name: format
         run: cargo fmt --check
       - name: lint
@@ -63,7 +63,7 @@ jobs:
         run: |
           rustup install ${{ matrix.rust }}
           rustup override set ${{ matrix.rust }}
-      - uses: taiki-e/install-action@31bc3c614629c629e983adbbe0ac85c251535667 # cargo-nextest
+      - uses: taiki-e/install-action@e75ebe7dbc95b597977d60b8be6b783b732e4d3b # cargo-nextest
       - name: Test w/ aws-lc-rs (default feature)
         env:
           POSTGRES_VERSION: ${{ matrix.postgres }}
