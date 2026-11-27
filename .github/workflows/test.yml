@@ -24,8 +24,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: taiki-e/install-action@09538a2ae3852d3c27e5027c679c7a297318f155 # cargo-nextest
-      - uses: taiki-e/install-action@dfc065c7e0e98a962f5f09de95e522dfd01e88d6 # cargo-llvm-cov
+      - uses: taiki-e/install-action@b7fa274f59c33c7e0f3bb70ca871c40a65cece98 # cargo-nextest
+      - uses: taiki-e/install-action@d7fc31c26763d448f2a8836afda46149eac7705d # cargo-llvm-cov
       - name: format
         run: cargo fmt --check
       - name: lint
@@ -63,7 +63,7 @@ jobs:
         run: |
           rustup install ${{ matrix.rust }}
           rustup override set ${{ matrix.rust }}
-      - uses: taiki-e/install-action@09538a2ae3852d3c27e5027c679c7a297318f155 # cargo-nextest
+      - uses: taiki-e/install-action@b7fa274f59c33c7e0f3bb70ca871c40a65cece98 # cargo-nextest
       - name: Test w/ aws-lc-rs (default feature)
         env:
           POSTGRES_VERSION: ${{ matrix.postgres }}
